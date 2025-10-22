@@ -1,0 +1,93 @@
+{
+	"name": "df_bronze_03",
+	"properties": {
+		"folder": {
+			"name": "BRONZE"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_tablas_bronze_03_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_bronze_03",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {0} as string,",
+				"          {1} as string,",
+				"          {2} as string,",
+				"          {3} as string,",
+				"          {4} as string,",
+				"          {5} as string,",
+				"          {6} as string,",
+				"          {7} as string,",
+				"          {8} as string,",
+				"          {9} as string,",
+				"          {10} as string,",
+				"          {11} as string,",
+				"          {12} as string,",
+				"          {13} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          servicio as string,",
+				"          registro as string,",
+				"          numero_a as string,",
+				"          imei_a as string,",
+				"          rbs_utilizada_a as string,",
+				"          celda_a as string,",
+				"          latitud_longitud_a as string,",
+				"          numero_b as string,",
+				"          imei_b as string,",
+				"          rbs_utilizada_b as string,",
+				"          celda_b as string,",
+				"          latitud_longitud_b as string,",
+				"          fecha as string,",
+				"          duracion as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          servicio = {0},",
+				"          registro = {1},",
+				"          numero_a = {2},",
+				"          imei_a = {3},",
+				"          rbs_utilizada_a = {4},",
+				"          celda_a = {5},",
+				"          latitud_longitud_a = {6},",
+				"          numero_b = {7},",
+				"          imei_b = {8},",
+				"          rbs_utilizada_b = {9},",
+				"          celda_b = {10},",
+				"          latitud_longitud_b = {11},",
+				"          fecha = {12},",
+				"          duracion = {13}",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

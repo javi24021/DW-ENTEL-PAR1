@@ -1,0 +1,83 @@
+{
+	"name": "ds_silver_llamadas",
+	"properties": {
+		"folder": {
+			"name": "SILVER"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_bronze_03",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          servicio as string,",
+				"          registro as string,",
+				"          numero_a as string,",
+				"          imei_a as string,",
+				"          rbs_utilizada_a as string,",
+				"          celda_a as string,",
+				"          latitud_longitud_a as string,",
+				"          numero_b as string,",
+				"          imei_b as string,",
+				"          rbs_utilizada_b as string,",
+				"          celda_b as string,",
+				"          latitud_longitud_b as string,",
+				"          fecha as string,",
+				"          duracion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 derive(latitud_longitud_a = replace(latitud_longitud_a, '\"', ''),",
+				"          latitud_longitud_b = replace(latitud_longitud_b, '\"', '')) ~> derivedColumn1",
+				"derivedColumn1 derive(latitud_a = split(replace(latitud_longitud_a, '\"', ''), ',')[1],",
+				"          longitud_a = split(replace(latitud_longitud_a, '\"', ''), ',')[2],",
+				"          latitud_b = split(replace(latitud_longitud_b, '\"', ''), ',')[1],",
+				"          longitud_b = split(replace(latitud_longitud_b, '\"', ''), ',')[2],",
+				"          fechas = split(toString(fecha), ' ')[1],",
+				"          hora = split(toString(fecha), ' ')[2]) ~> derivedColumn2",
+				"derivedColumn2 select(mapColumn(",
+				"          servicio,",
+				"          registro,",
+				"          numero_a,",
+				"          imei_a,",
+				"          rbs_utilizada_a,",
+				"          celda_a,",
+				"          latitud_a,",
+				"          longitud_a,",
+				"          numero_b,",
+				"          imei_b,",
+				"          rbs_utilizada_b,",
+				"          celda_b,",
+				"          latitud_b,",
+				"          longitud_b,",
+				"          duracion,",
+				"          fechas,",
+				"          hora",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}

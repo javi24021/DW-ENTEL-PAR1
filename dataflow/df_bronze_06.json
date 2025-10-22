@@ -1,0 +1,81 @@
+{
+	"name": "df_bronze_06",
+	"properties": {
+		"folder": {
+			"name": "BRONZE"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_tablas_bronze_06_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_bronze_06",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {0} as string,",
+				"          {1} as string,",
+				"          {2} as string,",
+				"          {3} as string,",
+				"          {4} as string,",
+				"          {5} as string,",
+				"          {6} as string,",
+				"          {7} as string,",
+				"          {8} as string,",
+				"          {9} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          fecha_inicio as string,",
+				"          fecha_fin as string,",
+				"          numero as string,",
+				"          imei as string,",
+				"          rbs_utilizada as string,",
+				"          celda as string,",
+				"          latitud_longitud as string,",
+				"          subidos as string,",
+				"          descargados as string,",
+				"          total as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          fecha_inicio = {0},",
+				"          fecha_fin = {1},",
+				"          numero = {2},",
+				"          imei = {3},",
+				"          rbs_utilizada = {4},",
+				"          celda = {5},",
+				"          latitud_longitud = {6},",
+				"          subidos = {7},",
+				"          descargados = {8},",
+				"          total = {9}",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
